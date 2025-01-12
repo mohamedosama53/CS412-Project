@@ -26,6 +26,17 @@ To further refine the features, chi-squared feature selection was performed, ide
 
 For the test data, I followed the same cleaning and aggregation steps as the training data to ensure consistency. The test set was transformed using the trained TF-IDF vectorizer, and the same chi-squared selection was applied to align the features across training and testing. This careful, consistent preprocessing pipeline ensured that the text data was clean, representative, and ready for model training, improving both efficiency and performance.
 
+## Machine Learning Models
+For the classification tasks, an SVC was used to predict user categories. The dataset was initially split into training and validation sets using train_test_split, with stratified sampling ensuring that the class distribution remained consistent.
+
+A LinearSVC model from sklearn was selected for its suitability with high-dimensional text data such as the TF-IDF vectors. To address class imbalance, custom class weights were calculated using logarithmic scaling. These weights ensured that minority classes were given appropriate emphasis during training, reducing the likelihood of bias toward dominant classes. This logarithmic scaling moderated extreme weights, contributing to a more stable training process.
+
+The LinearSVC model was trained with a maximum iteration limit of 2000 and a fixed random state for reproducibility. Model performance was evaluated using metrics such as accuracy, classification reports, and confusion matrices, which provided insights into the model's effectiveness across different categories. Misclassified instances were further analyzed by examining individual examples along with their associated captions.
+
+For regression tasks, LightGBM was employed to predict user engagement, measured as the average like count per user. The target variable was computed by calculating the mean like count per user, with missing values replaced by zeros. LightGBM, a gradient boosting framework, was configured with hyperparameters such as learning rate, maximum depth, and the Poisson objective, which is well-suited for count-based target variables. Those parameters were result of hypertuning using GridSearchCV. Data was then split into training and validation sets, and predictions were constrained to non-negative integers to ensure validity, as like counts cannot be negative.
+
+Model evaluation for regression was conducted using mean squared error (MSE), providing a measure of how accurately the predicted values matched the true values. Predictions on the test set were then generated and organized into a DataFrame. These classification and regression to some extent addressed challenges such as imbalanced data and high-dimensional feature spaces, presenting a reliable approach to text-based predictive modeling.
+
 # Results
 ## 1. Classification Task
 ### Accuracy
